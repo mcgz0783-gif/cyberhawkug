@@ -7,7 +7,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
   animate: {
     opacity: 1, y: 0, scale: 1,
-    transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] },
+    transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] as const },
   },
 };
 
