@@ -14,16 +14,325 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          actor_role: Database["public"]["Enums"]["user_role"]
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          actor_role: Database["public"]["Enums"]["user_role"]
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          actor_role?: Database["public"]["Enums"]["user_role"]
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          published_at: string | null
+          read_time: string | null
+          slug: string
+          tags: string[] | null
+          threat_level: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          category: string
+          content: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt: string
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          published_at?: string | null
+          read_time?: string | null
+          slug: string
+          tags?: string[] | null
+          threat_level?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          published_at?: string | null
+          read_time?: string | null
+          slug?: string
+          tags?: string[] | null
+          threat_level?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ebooks: {
+        Row: {
+          author: string | null
+          category: string | null
+          cover_url: string | null
+          created_at: string
+          description: string
+          file_key: string | null
+          file_size: number | null
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          page_count: number | null
+          price: number
+          slug: string
+          sort_order: number
+          stripe_price_id: string | null
+          stripe_product_id: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description: string
+          file_key?: string | null
+          file_size?: number | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          page_count?: number | null
+          price: number
+          slug: string
+          sort_order?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string
+          file_key?: string | null
+          file_size?: number | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          page_count?: number | null
+          price?: number
+          slug?: string
+          sort_order?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          is_active: boolean
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_active?: boolean
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_active?: boolean
+          subscribed_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          ban_reason: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          is_active: boolean
+          is_banned: boolean
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          ban_reason?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          is_active?: boolean
+          is_banned?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          ban_reason?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          is_banned?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount_paid: number
+          created_at: string
+          currency: string
+          download_count: number
+          ebook_id: string
+          id: string
+          last_download_at: string | null
+          refund_reason: string | null
+          refunded_at: string | null
+          status: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_id: string | null
+          stripe_session_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_paid: number
+          created_at?: string
+          currency?: string
+          download_count?: number
+          ebook_id: string
+          id?: string
+          last_download_at?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_id?: string | null
+          stripe_session_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string
+          currency?: string
+          download_count?: number
+          ebook_id?: string
+          id?: string
+          last_download_at?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_id?: string | null
+          stripe_session_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_ebook_id_fkey"
+            columns: ["ebook_id"]
+            isOneToOne: false
+            referencedRelation: "ebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stripe_events: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          payload: Json
+          processed: boolean
+          processed_at: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id: string
+          payload: Json
+          processed?: boolean
+          processed_at?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          payload?: Json
+          processed?: boolean
+          processed_at?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_admin_or_super_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      purchase_status: "PENDING" | "COMPLETED" | "REFUNDED" | "DISPUTED"
+      user_role: "CUSTOMER" | "ADMIN" | "SUPER_ADMIN"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +459,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      purchase_status: ["PENDING", "COMPLETED", "REFUNDED", "DISPUTED"],
+      user_role: ["CUSTOMER", "ADMIN", "SUPER_ADMIN"],
+    },
   },
 } as const
