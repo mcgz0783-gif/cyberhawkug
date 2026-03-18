@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import CoverUpload from "@/components/admin/CoverUpload";
 
 const AdminEbookEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -8,6 +9,7 @@ const AdminEbookEdit = () => {
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "", author: "", tags: "",
   });
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -24,6 +26,7 @@ const AdminEbookEdit = () => {
         author: data.author || "",
         tags: (data.tags || []).join(", "),
       });
+      setCoverUrl(data.cover_url || null);
       setLoading(false);
     };
     fetchEbook();
@@ -46,6 +49,7 @@ const AdminEbookEdit = () => {
       category: form.category,
       author: form.author,
       tags,
+      cover_url: coverUrl,
     }).eq("id", id!);
 
     setSaving(false);
@@ -66,6 +70,7 @@ const AdminEbookEdit = () => {
       )}
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
+        <CoverUpload currentUrl={coverUrl} folder="ebooks" onUpload={setCoverUrl} onRemove={() => setCoverUrl(null)} />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">TITLE</label>
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}

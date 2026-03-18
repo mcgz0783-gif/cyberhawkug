@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import CoverUpload from "@/components/admin/CoverUpload";
 
 const CATEGORIES = ["RANSOMWARE", "ZERO-DAY", "AI THREATS", "DATA BREACH", "PHISHING", "INFRASTRUCTURE", "ADVISORY", "GENERAL"];
 const THREAT_LEVELS = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
@@ -11,6 +12,7 @@ const AdminBlogEdit = () => {
   const [form, setForm] = useState({
     title: "", excerpt: "", content: "", category: "GENERAL", threat_level: "", tags: "", read_time: "",
   });
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -28,6 +30,7 @@ const AdminBlogEdit = () => {
         tags: (data.tags || []).join(", "),
         read_time: data.read_time || "",
       });
+      setCoverUrl(data.cover_url || null);
       setLoading(false);
     };
     fetchPost();
@@ -48,6 +51,7 @@ const AdminBlogEdit = () => {
       threat_level: form.threat_level || null,
       tags,
       read_time: form.read_time || null,
+      cover_url: coverUrl,
     }).eq("id", id!);
 
     setSaving(false);
@@ -68,6 +72,7 @@ const AdminBlogEdit = () => {
       )}
 
       <form onSubmit={handleSubmit} className="max-w-3xl space-y-5">
+        <CoverUpload currentUrl={coverUrl} folder="blog" onUpload={setCoverUrl} onRemove={() => setCoverUrl(null)} />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">TITLE</label>
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}

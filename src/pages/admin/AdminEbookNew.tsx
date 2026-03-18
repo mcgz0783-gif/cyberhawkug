@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import CoverUpload from "@/components/admin/CoverUpload";
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -9,6 +10,7 @@ const AdminEbookNew = () => {
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "", author: "CyberHawk-UG Threat Intel Team", tags: "",
   });
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -31,6 +33,7 @@ const AdminEbookNew = () => {
       category: form.category,
       author: form.author,
       tags,
+      cover_url: coverUrl,
     });
 
     setLoading(false);
@@ -49,6 +52,7 @@ const AdminEbookNew = () => {
       )}
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
+        <CoverUpload currentUrl={coverUrl} folder="ebooks" onUpload={setCoverUrl} onRemove={() => setCoverUrl(null)} />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">TITLE</label>
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
