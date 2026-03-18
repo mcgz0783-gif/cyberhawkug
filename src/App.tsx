@@ -30,8 +30,18 @@ import AdminEbooks from "./pages/admin/AdminEbooks";
 import AdminEbookNew from "./pages/admin/AdminEbookNew";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminBlogNew from "./pages/admin/AdminBlogNew";
+import AdminEbookEdit from "./pages/admin/AdminEbookEdit";
+import AdminBlogEdit from "./pages/admin/AdminBlogEdit";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
+
+// Public pages - detail
+import BlogPost from "./pages/BlogPost";
+
+// Legal pages
+import Terms from "./pages/legal/Terms";
+import Privacy from "./pages/legal/Privacy";
+import RefundPolicy from "./pages/legal/RefundPolicy";
 
 import NotFound from "./pages/NotFound";
 
@@ -50,7 +60,13 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/store" element={<Store />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
+
+            {/* Legal */}
+            <Route path="/legal/terms" element={<Terms />} />
+            <Route path="/legal/privacy" element={<Privacy />} />
+            <Route path="/legal/refund" element={<RefundPolicy />} />
 
             {/* Auth */}
             <Route path="/login" element={<Login />} />
@@ -68,8 +84,10 @@ const App = () => (
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/ebooks" element={<AdminEbooks />} />
               <Route path="/admin/ebooks/new" element={<AdminEbookNew />} />
+              <Route path="/admin/ebooks/:id/edit" element={<AdminEbookEdit />} />
               <Route path="/admin/blog" element={<AdminBlog />} />
               <Route path="/admin/blog/new" element={<AdminBlogNew />} />
+              <Route path="/admin/blog/:id/edit" element={<AdminBlogEdit />} />
               <Route path="/admin/orders" element={<AdminOrders />} />
               <Route path="/admin/customers" element={<AdminCustomers />} />
             </Route>
