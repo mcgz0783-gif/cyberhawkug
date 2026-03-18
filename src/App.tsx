@@ -30,8 +30,18 @@ import AdminEbooks from "./pages/admin/AdminEbooks";
 import AdminEbookNew from "./pages/admin/AdminEbookNew";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminBlogNew from "./pages/admin/AdminBlogNew";
+import AdminEbookEdit from "./pages/admin/AdminEbookEdit";
+import AdminBlogEdit from "./pages/admin/AdminBlogEdit";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
+
+// Public pages - detail
+import BlogPost from "./pages/BlogPost";
+
+// Legal pages
+import Terms from "./pages/legal/Terms";
+import Privacy from "./pages/legal/Privacy";
+import RefundPolicy from "./pages/legal/RefundPolicy";
 
 import NotFound from "./pages/NotFound";
 
