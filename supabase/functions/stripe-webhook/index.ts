@@ -7,20 +7,16 @@ serve(async (req) => {
     const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
     const STRIPE_WEBHOOK_SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET");
     if (!STRIPE_SECRET_KEY) throw new Error("STRIPE_SECRET_KEY not configured");
+    if (!STRIPE_WEBHOOK_SECRET) throw new Error("STRIPE_WEBHOOK_SECRET not configured");
 
     const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
     const body = await req.text();
     const sig = req.headers.get("stripe-signature");
 
-    let event: Stripe.Event;
+    if (!sig) throw new Error("Missing stripe-signature header");
 
-    if (STRIPE_WEBHOOK_SECRET && sig) {
-      event = stripe.webhooks.constructEvent(body, sig, STRIPE_WEBHOOK_SECRET);
-    } else {
-      // Fallback: parse body directly (for testing)
-      event = JSON.parse(body);
-    }
+    const event: Stripe.Event = stripe.webhooks.constructEvent(body, sig, STRIPE_WEBHOOK_SECRET);
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
