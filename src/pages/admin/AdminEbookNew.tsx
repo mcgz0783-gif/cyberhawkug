@@ -37,6 +37,8 @@ const AdminEbookNew = () => {
       author: form.author,
       tags,
       cover_url: coverUrl,
+      file_key: fileKey,
+      file_size: fileSize,
     });
 
     setLoading(false);
