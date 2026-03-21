@@ -37,6 +37,7 @@ import AdminCustomers from "./pages/admin/AdminCustomers";
 
 // Public pages - detail
 import BlogPost from "./pages/BlogPost";
+import EbookDetail from "./pages/EbookDetail";
 
 // Legal pages
 import Terms from "./pages/legal/Terms";
