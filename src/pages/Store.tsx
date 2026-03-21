@@ -5,7 +5,7 @@ import CyberButton from "@/components/ui/CyberButton";
 import ThreatBadge from "@/components/ui/ThreatBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
