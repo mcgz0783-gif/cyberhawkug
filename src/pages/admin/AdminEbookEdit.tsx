@@ -55,6 +55,8 @@ const AdminEbookEdit = () => {
       author: form.author,
       tags,
       cover_url: coverUrl,
+      file_key: fileKey,
+      file_size: fileSize,
     }).eq("id", id!);
 
     setSaving(false);
