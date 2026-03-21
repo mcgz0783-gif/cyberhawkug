@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
+import PdfUpload from "@/components/admin/PdfUpload";
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -11,6 +12,8 @@ const AdminEbookNew = () => {
     title: "", description: "", price: "", category: "", author: "CyberHawk-UG Threat Intel Team", tags: "",
   });
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [fileKey, setFileKey] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
