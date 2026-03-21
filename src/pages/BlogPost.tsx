@@ -117,6 +117,14 @@ const BlogPost = () => {
           </div>
         </section>
 
+        {post.cover_url && (
+          <section className="border-b border-border">
+            <div className="container mx-auto px-6 max-w-4xl py-8">
+              <img src={post.cover_url} alt={post.title} className="w-full max-h-[400px] object-cover border border-border" />
+            </div>
+          </section>
+        )}
+
         <section className="py-12">
           <motion.div
             initial={{ opacity: 0 }}

@@ -85,7 +85,12 @@ const Blog = () => {
                 <motion.article key={post.id} variants={fadeUp}
                   className="group border border-border bg-card p-6 md:p-8 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_-2px_0_0_hsl(173,100%,50%),0_0_15px_hsla(173,100%,50%,0.1)]">
                   <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8">
-                    <div className="flex-1">
+                     {post.cover_url && (
+                       <Link to={`/blog/${post.slug}`} className="shrink-0 w-full md:w-48 aspect-[3/2] overflow-hidden border border-border bg-secondary">
+                         <img src={post.cover_url} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                       </Link>
+                     )}
+                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         {post.threat_level && <ThreatBadge level={post.threat_level} />}
                         <span className="font-mono text-xs text-muted-foreground">{post.category}</span>
