@@ -116,7 +116,9 @@ const Store = () => {
                         ))}
                       </div>
                     )}
-                    <h3 className="font-display font-semibold text-sm tracking-wider uppercase text-foreground mb-2">{ebook.title}</h3>
+                    <Link to={`/store/${ebook.slug}`}>
+                      <h3 className="font-display font-semibold text-sm tracking-wider uppercase text-foreground mb-2 hover:text-primary transition-colors">{ebook.title}</h3>
+                    </Link>
                     <p className="font-body font-light text-sm text-muted-foreground leading-relaxed flex-1">
                       {ebook.description}
                     </p>
