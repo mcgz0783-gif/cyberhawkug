@@ -58,6 +58,7 @@ const AdminEbookNew = () => {
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
         <CoverUpload currentUrl={coverUrl} folder="ebooks" onUpload={setCoverUrl} onRemove={() => setCoverUrl(null)} />
+        <PdfUpload currentFileKey={fileKey} onUpload={(key, size) => { setFileKey(key); setFileSize(size); }} onRemove={() => { setFileKey(null); setFileSize(null); }} />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">TITLE</label>
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
