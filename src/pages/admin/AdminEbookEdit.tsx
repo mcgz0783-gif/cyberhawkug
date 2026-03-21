@@ -30,6 +30,8 @@ const AdminEbookEdit = () => {
         tags: (data.tags || []).join(", "),
       });
       setCoverUrl(data.cover_url || null);
+      setFileKey(data.file_key || null);
+      setFileSize(data.file_size || null);
       setLoading(false);
     };
     fetchEbook();
