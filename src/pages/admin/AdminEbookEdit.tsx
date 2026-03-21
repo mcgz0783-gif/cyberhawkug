@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
+import PdfUpload from "@/components/admin/PdfUpload";
 
 const AdminEbookEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,6 +11,8 @@ const AdminEbookEdit = () => {
     title: "", description: "", price: "", category: "", author: "", tags: "",
   });
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [fileKey, setFileKey] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
