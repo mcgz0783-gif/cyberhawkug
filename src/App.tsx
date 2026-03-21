@@ -37,6 +37,7 @@ import AdminCustomers from "./pages/admin/AdminCustomers";
 
 // Public pages - detail
 import BlogPost from "./pages/BlogPost";
+import EbookDetail from "./pages/EbookDetail";
 
 // Legal pages
 import Terms from "./pages/legal/Terms";
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/store/:slug" element={<EbookDetail />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
