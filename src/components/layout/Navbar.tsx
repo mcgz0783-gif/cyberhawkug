@@ -80,6 +80,7 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setIsOpen(false)} className="font-mono text-xs text-primary py-2">DASHBOARD</Link>
+                <Link to="/settings" onClick={() => setIsOpen(false)} className="font-mono text-xs text-muted-foreground py-2">SETTINGS</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setIsOpen(false)} className="font-mono text-xs text-destructive py-2">ADMIN PANEL</Link>}
                 <button onClick={() => { signOut(); setIsOpen(false); }} className="font-mono text-xs text-muted-foreground py-2 text-left">SIGN OUT</button>
               </>

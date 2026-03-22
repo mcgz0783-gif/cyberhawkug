@@ -79,6 +79,7 @@ const App = () => (
 
             {/* Customer */}
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
             {/* Admin */}
