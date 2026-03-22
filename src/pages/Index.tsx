@@ -3,6 +3,7 @@ import { Shield, Radar, Lock, Bug, Server, FileText, ChevronRight } from "lucide
 import CyberButton from "@/components/ui/CyberButton";
 import Layout from "@/components/layout/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
+import NewsletterForm from "@/components/NewsletterForm";
 
 const glitchVariants = {
   initial: { opacity: 0, x: -10 },
