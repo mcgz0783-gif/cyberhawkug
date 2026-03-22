@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Menu, X, User, LogOut } from "lucide-react";
+import { Shield, Menu, X, User, LogOut, Settings } from "lucide-react";
 import CyberButton from "@/components/ui/CyberButton";
 import { useAuth } from "@/contexts/AuthContext";
 
