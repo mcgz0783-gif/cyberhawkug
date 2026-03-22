@@ -20,6 +20,7 @@ import ResetPassword from "./pages/ResetPassword";
 
 // Customer pages
 import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 // Admin pages
@@ -78,6 +79,7 @@ const App = () => (
 
             {/* Customer */}
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
             {/* Admin */}

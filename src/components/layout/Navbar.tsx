@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Menu, X, User, LogOut } from "lucide-react";
+import { Shield, Menu, X, User, LogOut, Settings } from "lucide-react";
 import CyberButton from "@/components/ui/CyberButton";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -47,6 +47,9 @@ const Navbar = () => {
               <Link to="/dashboard" className="flex items-center gap-1 font-mono text-xs text-primary hover:text-primary/80 transition-colors">
                 <User className="w-3 h-3" /> PORTAL
               </Link>
+              <Link to="/settings" className="text-muted-foreground hover:text-primary transition-colors">
+                <Settings className="w-4 h-4" />
+              </Link>
               <button onClick={() => signOut()} className="text-muted-foreground hover:text-destructive transition-colors">
                 <LogOut className="w-4 h-4" />
               </button>
@@ -77,6 +80,7 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setIsOpen(false)} className="font-mono text-xs text-primary py-2">DASHBOARD</Link>
+                <Link to="/settings" onClick={() => setIsOpen(false)} className="font-mono text-xs text-muted-foreground py-2">SETTINGS</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setIsOpen(false)} className="font-mono text-xs text-destructive py-2">ADMIN PANEL</Link>}
                 <button onClick={() => { signOut(); setIsOpen(false); }} className="font-mono text-xs text-muted-foreground py-2 text-left">SIGN OUT</button>
               </>

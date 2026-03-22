@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
-import CyberButton from "@/components/ui/CyberButton";
-import ThreatBadge from "@/components/ui/ThreatBadge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -17,10 +17,15 @@ const fadeUp = {
 
 const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
+type SortOption = "default" | "price_asc" | "price_desc";
+
 const Store = () => {
   const [ebooks, setEbooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<SortOption>("default");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -36,6 +41,31 @@ const Store = () => {
     };
     fetch();
   }, []);
+
+  const categories = useMemo(() => {
+    const cats = new Set<string>();
+    ebooks.forEach((e) => { if (e.category) cats.add(e.category); });
+    return Array.from(cats).sort();
+  }, [ebooks]);
+
+  const filtered = useMemo(() => {
+    let result = [...ebooks];
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (e) =>
+          e.title.toLowerCase().includes(q) ||
+          e.description?.toLowerCase().includes(q) ||
+          e.tags?.some((t: string) => t.toLowerCase().includes(q))
+      );
+    }
+    if (selectedCategory) {
+      result = result.filter((e) => e.category === selectedCategory);
+    }
+    if (sortBy === "price_asc") result.sort((a, b) => a.price - b.price);
+    if (sortBy === "price_desc") result.sort((a, b) => b.price - a.price);
+    return result;
+  }, [ebooks, search, selectedCategory, sortBy]);
 
   const handlePurchase = async (ebookId: string) => {
     if (!user) { navigate("/login"); return; }
@@ -53,6 +83,8 @@ const Store = () => {
     setCheckoutLoading(null);
   };
 
+  const hasActiveFilters = search || selectedCategory || sortBy !== "default";
+
   return (
     <Layout>
       <section className="py-[12vh] border-b border-border">
@@ -67,75 +99,151 @@ const Store = () => {
         </div>
       </section>
 
+      {/* Filters */}
+      <section className="border-b border-border bg-card/50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search reports..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 font-mono text-xs bg-background border-border"
+              />
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-1">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
+                <span className="font-mono text-[10px] text-muted-foreground uppercase">Category:</span>
+              </div>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className={`font-mono text-[10px] px-2.5 py-1 border transition-colors ${
+                  !selectedCategory ? "border-primary text-primary bg-primary/10" : "border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                ALL
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`font-mono text-[10px] px-2.5 py-1 border transition-colors ${
+                    selectedCategory === cat ? "border-primary text-primary bg-primary/10" : "border-border text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {cat.toUpperCase()}
+                </button>
+              ))}
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="font-mono text-[10px] px-2.5 py-1 border border-border bg-background text-muted-foreground focus:outline-none focus:border-primary"
+              >
+                <option value="default">SORT: DEFAULT</option>
+                <option value="price_asc">PRICE: LOW → HIGH</option>
+                <option value="price_desc">PRICE: HIGH → LOW</option>
+              </select>
+
+              {hasActiveFilters && (
+                <button
+                  onClick={() => { setSearch(""); setSelectedCategory(null); setSortBy("default"); }}
+                  className="font-mono text-[10px] text-destructive hover:text-destructive/80 flex items-center gap-1"
+                >
+                  <X className="w-3 h-3" /> CLEAR
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16">
         <div className="container mx-auto px-6">
           {loading ? (
             <div className="text-center py-20">
               <p className="font-mono text-sm text-muted-foreground animate-pulse">LOADING INTEL...</p>
             </div>
-          ) : ebooks.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <div className="text-center py-20 border border-border bg-card p-12">
-              <p className="font-mono text-sm text-muted-foreground">NO REPORTS AVAILABLE AT THIS TIME</p>
-              <p className="font-body text-sm text-muted-foreground mt-2">Check back soon for new threat intelligence releases.</p>
+              <p className="font-mono text-sm text-muted-foreground">
+                {hasActiveFilters ? "NO REPORTS MATCH YOUR FILTERS" : "NO REPORTS AVAILABLE AT THIS TIME"}
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={() => { setSearch(""); setSelectedCategory(null); setSortBy("default"); }}
+                  className="font-mono text-xs text-primary mt-3 hover:underline"
+                >
+                  Clear all filters
+                </button>
+              )}
             </div>
           ) : (
-            <motion.div
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, amount: 0.1 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2"
-            >
-              {ebooks.map((ebook, i) => (
-                <motion.div
-                  key={ebook.id}
-                  variants={fadeUp}
-                  className="group border border-border bg-card flex flex-col transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_-2px_0_0_hsl(173,100%,50%),0_0_15px_hsla(173,100%,50%,0.1)]"
-                >
-                  <div className="aspect-[3/2] bg-secondary/50 relative overflow-hidden flex items-center justify-center">
-                    <div className="absolute inset-0 dot-grid opacity-50" />
-                    {ebook.cover_url ? (
-                      <img src={ebook.cover_url} alt={ebook.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="relative text-center p-6">
-                        <div className="font-mono text-xs text-muted-foreground mb-2">{ebook.category}</div>
-                        <div className="font-display font-semibold text-lg tracking-wider uppercase text-foreground leading-tight">
-                          {ebook.title}
+            <>
+              <p className="font-mono text-[10px] text-muted-foreground mb-6">
+                {filtered.length} REPORT{filtered.length !== 1 ? "S" : ""} FOUND
+              </p>
+              <motion.div
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, amount: 0.1 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2"
+              >
+                {filtered.map((ebook, i) => (
+                  <motion.div
+                    key={ebook.id}
+                    variants={fadeUp}
+                    className="group border border-border bg-card flex flex-col transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_-2px_0_0_hsl(173,100%,50%),0_0_15px_hsla(173,100%,50%,0.1)]"
+                  >
+                    <div className="aspect-[3/2] bg-secondary/50 relative overflow-hidden flex items-center justify-center">
+                      <div className="absolute inset-0 dot-grid opacity-50" />
+                      {ebook.cover_url ? (
+                        <img src={ebook.cover_url} alt={ebook.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="relative text-center p-6">
+                          <div className="font-mono text-xs text-muted-foreground mb-2">{ebook.category}</div>
+                          <div className="font-display font-semibold text-lg tracking-wider uppercase text-foreground leading-tight">
+                            {ebook.title}
+                          </div>
                         </div>
+                      )}
+                      <div className="absolute top-3 right-3 font-mono text-[10px] text-muted-foreground/50">
+                        CH-TIR-{String(i + 1).padStart(3, "0")}
                       </div>
-                    )}
-                    <div className="absolute top-3 right-3 font-mono text-[10px] text-muted-foreground/50">
-                      CH-TIR-{String(i + 1).padStart(3, "0")}
                     </div>
-                  </div>
 
-                  <div className="p-6 flex-1 flex flex-col">
-                    {ebook.tags?.length > 0 && (
-                      <div className="mb-3 flex flex-wrap gap-1">
-                        {ebook.tags.slice(0, 3).map((tag: string) => (
-                          <span key={tag} className="font-mono text-[10px] text-muted-foreground border border-border px-2 py-0.5">{tag}</span>
-                        ))}
+                    <div className="p-6 flex-1 flex flex-col">
+                      {ebook.tags?.length > 0 && (
+                        <div className="mb-3 flex flex-wrap gap-1">
+                          {ebook.tags.slice(0, 3).map((tag: string) => (
+                            <span key={tag} className="font-mono text-[10px] text-muted-foreground border border-border px-2 py-0.5">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+                      <Link to={`/store/${ebook.slug}`}>
+                        <h3 className="font-display font-semibold text-sm tracking-wider uppercase text-foreground mb-2 hover:text-primary transition-colors">{ebook.title}</h3>
+                      </Link>
+                      <p className="font-body font-light text-sm text-muted-foreground leading-relaxed flex-1">
+                        {ebook.description}
+                      </p>
+                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
+                        <span className="font-mono text-lg text-primary">{formatPrice(ebook.price)}</span>
+                        <button
+                          onClick={() => handlePurchase(ebook.id)}
+                          disabled={checkoutLoading === ebook.id}
+                          className="px-6 py-2 font-display font-bold tracking-widest uppercase text-xs cyber-clip bg-primary text-primary-foreground hover:brightness-125 transition-all disabled:opacity-50"
+                        >
+                          {checkoutLoading === ebook.id ? "LOADING..." : "PURCHASE"}
+                        </button>
                       </div>
-                    )}
-                    <Link to={`/store/${ebook.slug}`}>
-                      <h3 className="font-display font-semibold text-sm tracking-wider uppercase text-foreground mb-2 hover:text-primary transition-colors">{ebook.title}</h3>
-                    </Link>
-                    <p className="font-body font-light text-sm text-muted-foreground leading-relaxed flex-1">
-                      {ebook.description}
-                    </p>
-                    <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
-                      <span className="font-mono text-lg text-primary">{formatPrice(ebook.price)}</span>
-                      <button
-                        onClick={() => handlePurchase(ebook.id)}
-                        disabled={checkoutLoading === ebook.id}
-                        className="px-6 py-2 font-display font-bold tracking-widest uppercase text-xs cyber-clip bg-primary text-primary-foreground hover:brightness-125 transition-all disabled:opacity-50"
-                      >
-                        {checkoutLoading === ebook.id ? "LOADING..." : "PURCHASE"}
-                      </button>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </>
           )}
         </div>
       </section>
