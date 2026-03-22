@@ -58,7 +58,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact */}
+          {/* Contact & Newsletter */}
           <div>
             <h4 className="font-display font-semibold text-sm tracking-[0.15em] uppercase text-foreground mb-4">
               CONTACT
@@ -77,6 +77,10 @@ const Footer = () => {
                 WhatsApp
               </a>
             </div>
+            <h4 className="font-display font-semibold text-sm tracking-[0.15em] uppercase text-foreground mt-6 mb-2">
+              THREAT INTEL UPDATES
+            </h4>
+            <NewsletterForm compact />
           </div>
         </div>
 

@@ -229,6 +229,13 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Newsletter */}
+      <section className="py-24 border-t border-border">
+        <div className="container mx-auto px-6">
+          <NewsletterForm />
+        </div>
+      </section>
     </Layout>
   );
 };
