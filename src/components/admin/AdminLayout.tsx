@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
-import { Shield, Book, FileText, ShoppingCart, Users, BarChart3, Settings, LogOut, Menu, X } from "lucide-react";
+import { Shield, Book, FileText, ShoppingCart, Users, BarChart3, Settings, LogOut, Menu, X, TrendingUp } from "lucide-react";
 
 const adminNav = [
   { label: "DASHBOARD", path: "/admin", icon: BarChart3 },
+  { label: "ANALYTICS", path: "/admin/analytics", icon: TrendingUp },
   { label: "EBOOKS", path: "/admin/ebooks", icon: Book },
   { label: "BLOG", path: "/admin/blog", icon: FileText },
   { label: "ORDERS", path: "/admin/orders", icon: ShoppingCart },
