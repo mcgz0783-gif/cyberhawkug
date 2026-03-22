@@ -1,5 +1,6 @@
 import { Shield, Mail, Phone, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import NewsletterForm from "@/components/NewsletterForm";
 
 const Footer = () => {
   return (
