@@ -20,6 +20,7 @@ import ResetPassword from "./pages/ResetPassword";
 
 // Customer pages
 import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 // Admin pages
