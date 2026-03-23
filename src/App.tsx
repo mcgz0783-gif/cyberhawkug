@@ -36,6 +36,7 @@ import AdminBlogEdit from "./pages/admin/AdminBlogEdit";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminNewsletter from "./pages/admin/AdminNewsletter";
 
 // Public pages - detail
 import BlogPost from "./pages/BlogPost";
