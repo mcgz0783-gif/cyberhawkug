@@ -237,6 +237,26 @@ const EbookDetail = () => {
                     <Link to="/login" className="text-primary hover:underline">Sign in</Link> to purchase
                   </p>
                 )}
+
+                {!purchase && (
+                  <div className="mt-4 flex items-center gap-2 max-w-xs">
+                    <Tag className="w-4 h-4 text-muted-foreground shrink-0" />
+                    <Input
+                      value={discountCode}
+                      onChange={e => setDiscountCode(e.target.value)}
+                      placeholder="DISCOUNT CODE"
+                      className="font-mono text-xs uppercase h-8"
+                      disabled={!!appliedDiscount}
+                    />
+                    <button
+                      onClick={applyDiscountCode}
+                      disabled={applyingCode || !!appliedDiscount}
+                      className="font-mono text-xs text-primary hover:underline disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {appliedDiscount ? "APPLIED" : "APPLY"}
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>
