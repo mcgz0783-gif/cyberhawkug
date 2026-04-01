@@ -17,7 +17,6 @@ serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SUPABASE_PUBLISHABLE_KEY = Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
 
-    // Get user from auth header
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("Not authenticated");
 
@@ -28,10 +27,9 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) throw new Error("Unauthorized");
 
-    const { ebookId } = await req.json();
+    const { ebookId, discountCode } = await req.json();
     if (!ebookId) throw new Error("ebookId required");
 
-    // Get ebook
     const { data: ebook, error: ebookError } = await supabase
       .from("ebooks")
       .select("id, slug, title, price, stripe_price_id, is_published")
@@ -41,7 +39,6 @@ serve(async (req) => {
     if (ebookError || !ebook) throw new Error("Ebook not found");
     if (!ebook.is_published) throw new Error("Ebook not available");
 
-    // Check already purchased
     const { data: existing } = await supabase
       .from("purchases")
       .select("id, status")
@@ -52,12 +49,31 @@ serve(async (req) => {
 
     if (existing) throw new Error("Already purchased");
 
+    const supabaseAdmin = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+
+    // Validate discount code if provided
+    let discountPercent = 0;
+    let discountId: string | null = null;
+    if (discountCode) {
+      const { data: discount } = await supabaseAdmin
+        .from("discount_codes")
+        .select("*")
+        .eq("code", discountCode.toUpperCase().trim())
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (!discount) throw new Error("Invalid discount code");
+      if (discount.expires_at && new Date(discount.expires_at) < new Date()) throw new Error("Discount code expired");
+      if (discount.max_uses && discount.current_uses >= discount.max_uses) throw new Error("Discount code usage limit reached");
+
+      discountPercent = discount.discount_percent;
+      discountId = discount.id;
+    }
+
     const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
-    // Create or find Stripe price
     let priceId = ebook.stripe_price_id;
     if (!priceId) {
-      // Create product and price in Stripe
       const product = await stripe.products.create({
         name: ebook.title,
         metadata: { ebook_id: ebook.id },
@@ -69,38 +85,65 @@ serve(async (req) => {
       });
       priceId = price.id;
 
-      // Save back to ebook using service role
-      const supabaseAdmin = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
       await supabaseAdmin.from("ebooks").update({
         stripe_product_id: product.id,
         stripe_price_id: price.id,
       }).eq("id", ebook.id);
     }
 
-    // Determine base URL from origin header or fallback
     const origin = req.headers.get("origin") || "https://cyberhawk-ug.com";
 
-    const session = await stripe.checkout.sessions.create({
+    // Create Stripe coupon if discount applies
+    let stripeCouponId: string | undefined;
+    if (discountPercent > 0) {
+      const coupon = await stripe.coupons.create({
+        percent_off: discountPercent,
+        duration: "once",
+        metadata: { discount_code: discountCode },
+      });
+      stripeCouponId = coupon.id;
+    }
+
+    const sessionParams: any = {
       mode: "payment",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: user.email,
       client_reference_id: user.id,
-      metadata: { ebookId: ebook.id, userId: user.id },
+      metadata: { ebookId: ebook.id, userId: user.id, discountCode: discountCode || "" },
       success_url: `${origin}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/store/${ebook.slug}`,
-    });
+    };
 
-    // Create PENDING purchase via service role
-    const supabaseAdmin = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    if (stripeCouponId) {
+      sessionParams.discounts = [{ coupon: stripeCouponId }];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    // Calculate actual amount paid
+    const actualAmount = discountPercent > 0
+      ? Math.round(ebook.price * (1 - discountPercent / 100))
+      : ebook.price;
+
     await supabaseAdmin.from("purchases").insert({
       user_id: user.id,
       ebook_id: ebook.id,
       status: "PENDING",
-      amount_paid: ebook.price,
+      amount_paid: actualAmount,
       currency: "usd",
       stripe_session_id: session.id,
     });
+
+    // Increment discount code usage
+    if (discountId) {
+      await supabaseAdmin.rpc("increment_discount_usage", { discount_id: discountId }).catch(() => {
+        // Fallback: direct update
+        supabaseAdmin.from("discount_codes")
+          .update({ current_uses: discountPercent }) // Will be handled by trigger
+          .eq("id", discountId);
+      });
+    }
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
