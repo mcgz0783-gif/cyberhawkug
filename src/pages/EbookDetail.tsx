@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { ArrowLeft, ShoppingBag, FileText, CheckCircle, Download } from "lucide-react";
+import { ArrowLeft, ShoppingBag, FileText, CheckCircle, Download, Tag } from "lucide-react";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 
 const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
