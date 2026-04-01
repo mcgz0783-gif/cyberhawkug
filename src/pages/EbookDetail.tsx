@@ -51,13 +51,30 @@ const EbookDetail = () => {
     }
   }, [user, ebook]);
 
+  const applyDiscountCode = async () => {
+    if (!discountCode.trim()) return;
+    setApplyingCode(true);
+    const { data, error } = await supabase
+      .from("discount_codes")
+      .select("code, discount_percent, max_uses, current_uses, expires_at, is_active")
+      .eq("code", discountCode.toUpperCase().trim())
+      .eq("is_active", true)
+      .maybeSingle();
+    if (error || !data) { toast.error("Invalid discount code"); setApplyingCode(false); return; }
+    if (data.expires_at && new Date(data.expires_at) < new Date()) { toast.error("Code expired"); setApplyingCode(false); return; }
+    if (data.max_uses && data.current_uses >= data.max_uses) { toast.error("Code usage limit reached"); setApplyingCode(false); return; }
+    setAppliedDiscount({ code: data.code, discount_percent: data.discount_percent });
+    toast.success(`${data.discount_percent}% discount applied!`);
+    setApplyingCode(false);
+  };
+
   const handlePurchase = async () => {
     if (!user) { navigate("/login"); return; }
     if (!ebook) return;
     setCheckoutLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { ebookId: ebook.id },
+        body: { ebookId: ebook.id, discountCode: appliedDiscount?.code || undefined },
       });
       if (error) throw error;
       if (data?.error) { toast.error(data.error); return; }
