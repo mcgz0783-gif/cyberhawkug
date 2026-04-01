@@ -367,6 +367,10 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      increment_discount_usage: {
+        Args: { discount_id: string }
+        Returns: undefined
+      }
       is_admin_or_super_admin: { Args: never; Returns: boolean }
     }
     Enums: {
