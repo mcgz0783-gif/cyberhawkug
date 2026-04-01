@@ -19,6 +19,9 @@ const EbookDetail = () => {
   const [purchase, setPurchase] = useState<any>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; discount_percent: number } | null>(null);
+  const [applyingCode, setApplyingCode] = useState(false);
 
   useEffect(() => {
     const fetchEbook = async () => {
