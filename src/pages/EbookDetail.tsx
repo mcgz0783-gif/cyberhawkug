@@ -191,8 +191,18 @@ const EbookDetail = () => {
 
               {/* Price + Action */}
               <div className="border-t border-border pt-6">
-                <div className="flex items-center gap-6">
-                  <span className="font-display font-bold text-3xl text-primary">{formatPrice(ebook.price)}</span>
+                <div className="flex items-center gap-6 flex-wrap">
+                  <div>
+                    {appliedDiscount ? (
+                      <div className="flex items-center gap-3">
+                        <span className="font-display font-bold text-3xl text-muted-foreground line-through">{formatPrice(ebook.price)}</span>
+                        <span className="font-display font-bold text-3xl text-primary">{formatPrice(ebook.price * (1 - appliedDiscount.discount_percent / 100))}</span>
+                        <span className="font-mono text-xs text-primary bg-primary/10 px-2 py-0.5 border border-primary">{appliedDiscount.discount_percent}% OFF</span>
+                      </div>
+                    ) : (
+                      <span className="font-display font-bold text-3xl text-primary">{formatPrice(ebook.price)}</span>
+                    )}
+                  </div>
 
                   {purchase ? (
                     <div className="flex items-center gap-4">
