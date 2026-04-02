@@ -206,6 +206,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Featured Ebooks */}
+      <FeaturedEbooks />
+
       {/* CTA Section */}
       <section className="py-24 border-t border-border notched bg-card/30">
         <div className="container mx-auto px-6 text-center">
