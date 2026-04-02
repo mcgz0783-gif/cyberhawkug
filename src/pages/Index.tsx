@@ -4,6 +4,7 @@ import CyberButton from "@/components/ui/CyberButton";
 import Layout from "@/components/layout/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
 import NewsletterForm from "@/components/NewsletterForm";
+import FeaturedEbooks from "@/components/home/FeaturedEbooks";
 
 const glitchVariants = {
   initial: { opacity: 0, x: -10 },
