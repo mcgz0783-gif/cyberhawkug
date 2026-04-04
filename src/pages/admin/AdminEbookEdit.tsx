@@ -85,6 +85,10 @@ const AdminEbookEdit = () => {
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             className="w-full bg-secondary border border-border px-4 py-3 font-body text-sm text-foreground focus:border-primary focus:outline-none" />
         </div>
+        <AIContentGenerator
+          onInsert={(text) => setForm(f => ({ ...f, description: f.description ? f.description + "\n\n" + text : text }))}
+          placeholder="E.g. Write a compelling ebook description about cloud security..."
+        />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">DESCRIPTION</label>
           <textarea required rows={4} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
