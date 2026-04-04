@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
 import PdfUpload from "@/components/admin/PdfUpload";
+import AIContentGenerator from "@/components/admin/AIContentGenerator";
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -64,6 +65,10 @@ const AdminEbookNew = () => {
           <input type="text" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             className="w-full bg-secondary border border-border px-4 py-3 font-body text-sm text-foreground focus:border-primary focus:outline-none" />
         </div>
+        <AIContentGenerator
+          onInsert={(text) => setForm(f => ({ ...f, description: f.description ? f.description + "\n\n" + text : text }))}
+          placeholder="E.g. Write a compelling description for an ebook about network penetration testing..."
+        />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">DESCRIPTION</label>
           <textarea required rows={4} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
+import AIContentGenerator from "@/components/admin/AIContentGenerator";
 
 const CATEGORIES = ["RANSOMWARE", "ZERO-DAY", "AI THREATS", "DATA BREACH", "PHISHING", "INFRASTRUCTURE", "ADVISORY", "GENERAL"];
 const THREAT_LEVELS = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
@@ -63,6 +64,10 @@ const AdminBlogNew = () => {
           <textarea required rows={2} value={form.excerpt} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))}
             className="w-full bg-secondary border border-border px-4 py-3 font-body text-sm text-foreground focus:border-primary focus:outline-none resize-none" />
         </div>
+        <AIContentGenerator
+          onInsert={(text) => setForm(f => ({ ...f, content: f.content ? f.content + "\n\n" + text : text }))}
+          placeholder="E.g. Write a blog post about ransomware prevention tips for East African businesses..."
+        />
         <div>
           <label className="block font-mono text-xs text-muted-foreground mb-2 tracking-wider uppercase">CONTENT (MARKDOWN)</label>
           <textarea required rows={12} value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
