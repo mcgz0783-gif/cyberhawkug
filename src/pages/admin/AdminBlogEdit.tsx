@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
+import AIContentGenerator from "@/components/admin/AIContentGenerator";
 
 const CATEGORIES = ["RANSOMWARE", "ZERO-DAY", "AI THREATS", "DATA BREACH", "PHISHING", "INFRASTRUCTURE", "ADVISORY", "GENERAL"];
 const THREAT_LEVELS = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];
