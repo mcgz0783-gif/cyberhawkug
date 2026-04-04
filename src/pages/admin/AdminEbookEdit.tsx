@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import CoverUpload from "@/components/admin/CoverUpload";
 import PdfUpload from "@/components/admin/PdfUpload";
+import AIContentGenerator from "@/components/admin/AIContentGenerator";
 
 const AdminEbookEdit = () => {
   const { id } = useParams<{ id: string }>();
