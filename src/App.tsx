@@ -58,6 +58,7 @@ const PageLoader = () => (
 );
 
 const App = () => (
+  <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
