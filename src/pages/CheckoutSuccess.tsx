@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Shield, CheckCircle } from "lucide-react";
+import SEO from "@/components/SEO";
 import CyberButton from "@/components/ui/CyberButton";
 
 const CheckoutSuccess = () => {
@@ -21,6 +22,7 @@ const CheckoutSuccess = () => {
 
   return (
     <Layout>
+      <SEO title="Purchase Complete" description="Your purchase was successful. Download your threat intelligence report now." path="/checkout-success" />
       <section className="min-h-[80vh] flex items-center justify-center py-20">
         <div className="w-full max-w-md border border-primary bg-card p-8 text-center">
           {status === "loading" && (

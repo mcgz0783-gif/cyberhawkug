@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, Radar, Lock, Bug, Server, FileText, ChevronRight } from "lucide-react";
 import CyberButton from "@/components/ui/CyberButton";
 import Layout from "@/components/layout/Layout";
+import SEO from "@/components/SEO";
 import heroBg from "@/assets/hero-bg.jpg";
 import NewsletterForm from "@/components/NewsletterForm";
 import FeaturedEbooks from "@/components/home/FeaturedEbooks";
@@ -77,6 +78,7 @@ const stats = [
 const Index = () => {
   return (
     <Layout>
+      <SEO title="CyberHawk-UG — Cybersecurity for East Africa" description="Elite threat intelligence, penetration testing, and incident response services protecting Uganda's digital infrastructure." path="/" />
       {/* Hero Section */}
       <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
         {/* Background */}

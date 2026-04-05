@@ -1,7 +1,9 @@
 import Layout from "@/components/layout/Layout";
+import SEO from "@/components/SEO";
 
 const Terms = () => (
   <Layout>
+      <SEO title="Terms of Service" description="CyberHawk-UG terms of service governing the use of our cybersecurity products and services." path="/legal/terms" />
     <section className="py-[10vh] border-b border-border">
       <div className="container mx-auto px-6">
         <span className="font-mono text-xs text-primary tracking-widest uppercase">// LEGAL</span>

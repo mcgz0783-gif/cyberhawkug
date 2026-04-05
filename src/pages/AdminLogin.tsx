@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Layout from "@/components/layout/Layout";
 import { Shield, AlertTriangle } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const AdminLogin = () => {
   const { signIn, profile } = useAuth();
@@ -36,6 +37,7 @@ const AdminLogin = () => {
 
   return (
     <Layout>
+      <SEO title="Admin Login" description="CyberHawk-UG admin portal login." path="/admin-login" />
       <section className="min-h-[80vh] flex items-center justify-center py-20">
         <div className="w-full max-w-md border border-border bg-card p-8">
           <div className="flex items-center gap-2 mb-2">

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Shield } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const ResetPassword = () => {
   if (!ready) {
     return (
       <Layout>
+      <SEO title="Reset Password" description="Set a new password for your CyberHawk-UG account." path="/reset-password" />
         <section className="min-h-[80vh] flex items-center justify-center py-20">
           <div className="text-center">
             <p className="font-mono text-sm text-muted-foreground">VALIDATING RECOVERY TOKEN...</p>

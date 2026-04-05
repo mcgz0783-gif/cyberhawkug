@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, Target, Users, Award, Globe, Clock } from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import CyberButton from "@/components/ui/CyberButton";
+import SEO from "@/components/SEO";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -33,6 +34,7 @@ const values = [
 const About = () => {
   return (
     <Layout>
+      <SEO title="About Us" description="Learn about CyberHawk-UG's mission to defend East Africa's digital infrastructure with world-class cybersecurity expertise." path="/about" />
       {/* Hero */}
       <section className="py-[15vh] border-b border-border">
         <div className="container mx-auto px-6">

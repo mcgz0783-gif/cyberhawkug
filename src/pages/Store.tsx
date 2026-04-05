@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import SEO from "@/components/SEO";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -87,6 +88,7 @@ const Store = () => {
 
   return (
     <Layout>
+      <SEO title="Intelligence Store" description="Browse and purchase threat intelligence reports, cybersecurity ebooks, and training materials from CyberHawk-UG." path="/store" />
       <section className="py-[12vh] border-b border-border">
         <div className="container mx-auto px-6">
           <span className="font-mono text-xs text-primary tracking-widest uppercase">// THREAT INTEL STORE</span>
