@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Layout from "@/components/layout/Layout";
 import CyberButton from "@/components/ui/CyberButton";
 import { Shield, Eye, EyeOff } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Login = () => {
   const { signIn } = useAuth();
@@ -26,6 +27,7 @@ const Login = () => {
 
   return (
     <Layout>
+      <SEO title="Login" description="Sign in to your CyberHawk-UG account to access purchased reports and threat intelligence." path="/login" />
       <section className="min-h-[80vh] flex items-center justify-center py-20">
         <div className="w-full max-w-md border border-border bg-card p-8">
           <div className="flex items-center gap-2 mb-8">

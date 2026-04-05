@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Phone, MessageCircle, MapPin, Send } from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import CyberButton from "@/components/ui/CyberButton";
+import SEO from "@/components/SEO";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
@@ -14,6 +15,7 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEO title="Contact Us" description="Get in touch with CyberHawk-UG's security team for consultations, incident response, or partnership inquiries." path="/contact" />
       {/* Hero */}
       <section className="py-[12vh] border-b border-border">
         <div className="container mx-auto px-6">

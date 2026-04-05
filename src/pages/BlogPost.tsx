@@ -5,6 +5,7 @@ import Layout from "@/components/layout/Layout";
 import ThreatBadge from "@/components/ui/ThreatBadge";
 import { Clock, ArrowLeft, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -85,6 +86,15 @@ const BlogPost = () => {
 
   return (
     <Layout>
+      <SEO
+        title={post.title}
+        description={post.excerpt}
+        path={`/blog/${post.slug}`}
+        image={post.cover_url || undefined}
+        type="article"
+        publishedAt={post.published_at}
+        author={post.author}
+      />
       <article>
         <section className="py-[10vh] border-b border-border">
           <div className="container mx-auto px-6 max-w-4xl">
