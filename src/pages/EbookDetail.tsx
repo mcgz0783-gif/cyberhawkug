@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft, ShoppingBag, FileText, CheckCircle, Download, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import SEO from "@/components/SEO";
 
 const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
