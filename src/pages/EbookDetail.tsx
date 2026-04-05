@@ -127,6 +127,12 @@ const EbookDetail = () => {
 
   return (
     <Layout>
+      <SEO
+        title={ebook.title}
+        description={ebook.description?.slice(0, 160)}
+        path={`/store/${ebook.slug}`}
+        image={ebook.cover_url || undefined}
+      />
       <section className="py-[10vh] border-b border-border">
         <div className="container mx-auto px-6 max-w-5xl">
           <Link to="/store" className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors mb-8">
