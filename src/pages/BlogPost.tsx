@@ -5,7 +5,7 @@ import Layout from "@/components/layout/Layout";
 import ThreatBadge from "@/components/ui/ThreatBadge";
 import { Clock, ArrowLeft, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import SEO from "@/components/SEO";
+import SEO, { buildArticleJsonLd } from "@/components/SEO";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -94,6 +94,7 @@ const BlogPost = () => {
         type="article"
         publishedAt={post.published_at}
         author={post.author}
+        jsonLd={buildArticleJsonLd(post)}
       />
       <article>
         <section className="py-[10vh] border-b border-border">
