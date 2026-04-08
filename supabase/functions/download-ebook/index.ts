@@ -9,6 +9,18 @@ const corsHeaders = {
 const MAX_DOWNLOADS = 10;
 const SIGNED_URL_EXPIRY = 900; // 15 minutes
 
+const SAFE_ERRORS = new Set([
+  "Not authenticated",
+  "Unauthorized",
+  "purchaseId required",
+  "Purchase not found",
+  "Purchase not completed",
+  "Access revoked — purchase was refunded",
+  "Download limit reached (10/10)",
+  "Ebook file not available",
+  "Account suspended",
+]);
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -26,6 +38,15 @@ serve(async (req) => {
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) throw new Error("Unauthorized");
+
+    // Check if user is banned
+    const supabaseAdmin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("is_banned, is_active")
+      .eq("id", user.id)
+      .single();
+    if (profile?.is_banned || profile?.is_active === false) throw new Error("Account suspended");
 
     const { purchaseId } = await req.json();
     if (!purchaseId) throw new Error("purchaseId required");
@@ -47,7 +68,6 @@ serve(async (req) => {
     if (!ebook?.file_key) throw new Error("Ebook file not available");
 
     // Generate signed URL using service role
-    const supabaseAdmin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
     const { data: signedUrl, error: signError } = await supabaseAdmin.storage
       .from("ebooks")
       .createSignedUrl(ebook.file_key, SIGNED_URL_EXPIRY, {
@@ -67,7 +87,8 @@ serve(async (req) => {
     });
   } catch (error: any) {
     console.error("Download error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    const msg = SAFE_ERRORS.has(error.message) ? error.message : "An unexpected error occurred";
+    return new Response(JSON.stringify({ error: msg }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

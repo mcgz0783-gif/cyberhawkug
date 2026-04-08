@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import ThreatBadge from "@/components/ui/ThreatBadge";
@@ -79,7 +80,7 @@ const BlogPost = () => {
         .replace(/\n/g, "<br />");
 
       return (
-        <p key={i} className="font-body font-light text-muted-foreground leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: html }} />
+        <p key={i} className="font-body font-light text-muted-foreground leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
       );
     });
   };
