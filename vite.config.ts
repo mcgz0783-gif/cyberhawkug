@@ -2,6 +2,18 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import vitePrerender from "vite-plugin-prerender";
+
+const PRERENDER_ROUTES = [
+  "/",
+  "/about",
+  "/store",
+  "/blog",
+  "/contact",
+  "/legal/terms",
+  "/legal/privacy",
+  "/legal/refund",
+];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
