@@ -233,6 +233,21 @@ export type Database = {
         }
         Relationships: []
       }
+      notes: {
+        Row: {
+          id: number
+          title: string
+        }
+        Insert: {
+          id?: never
+          title: string
+        }
+        Update: {
+          id?: never
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           ban_reason: string | null
