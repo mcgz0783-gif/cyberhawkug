@@ -372,6 +372,7 @@ export type Database = {
         Returns: undefined
       }
       is_admin_or_super_admin: { Args: never; Returns: boolean }
+      is_not_banned: { Args: never; Returns: boolean }
     }
     Enums: {
       purchase_status: "PENDING" | "COMPLETED" | "REFUNDED" | "DISPUTED"
