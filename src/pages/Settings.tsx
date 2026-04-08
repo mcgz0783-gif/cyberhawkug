@@ -42,6 +42,10 @@ const Settings = () => {
   };
 
   const handleChangePassword = async () => {
+    if (!passwordCurrent) {
+      toast.error("Please enter your current password");
+      return;
+    }
     if (passwordNew.length < 6) {
       toast.error("Password must be at least 6 characters");
       return;
@@ -51,6 +55,16 @@ const Settings = () => {
       return;
     }
     setChangingPassword(true);
+    // Verify current password first
+    const { error: verifyErr } = await supabase.auth.signInWithPassword({
+      email: user?.email ?? "",
+      password: passwordCurrent,
+    });
+    if (verifyErr) {
+      setChangingPassword(false);
+      toast.error("Current password is incorrect");
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password: passwordNew });
     setChangingPassword(false);
     if (error) {
