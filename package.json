@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "vercel-build": "npm run build",
+    "deploy": "npx vercel --prod",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
