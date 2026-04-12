@@ -3,6 +3,7 @@ import Layout from "@/components/layout/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
+import SEO from "@/components/SEO";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { User, Mail, Shield, Save } from "lucide-react";
@@ -41,6 +42,10 @@ const Settings = () => {
   };
 
   const handleChangePassword = async () => {
+    if (!passwordCurrent) {
+      toast.error("Please enter your current password");
+      return;
+    }
     if (passwordNew.length < 6) {
       toast.error("Password must be at least 6 characters");
       return;
@@ -50,6 +55,16 @@ const Settings = () => {
       return;
     }
     setChangingPassword(true);
+    // Verify current password first
+    const { error: verifyErr } = await supabase.auth.signInWithPassword({
+      email: user?.email ?? "",
+      password: passwordCurrent,
+    });
+    if (verifyErr) {
+      setChangingPassword(false);
+      toast.error("Current password is incorrect");
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password: passwordNew });
     setChangingPassword(false);
     if (error) {
@@ -65,6 +80,7 @@ const Settings = () => {
   if (authLoading) {
     return (
       <Layout>
+      <SEO title="Account Settings" description="Manage your CyberHawk-UG account settings and profile information." path="/settings" />
         <div className="min-h-[60vh] flex items-center justify-center">
           <p className="font-mono text-sm text-muted-foreground animate-pulse">LOADING...</p>
         </div>

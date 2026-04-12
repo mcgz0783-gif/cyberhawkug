@@ -1,7 +1,9 @@
 import Layout from "@/components/layout/Layout";
+import SEO from "@/components/SEO";
 
 const RefundPolicy = () => (
   <Layout>
+      <SEO title="Refund Policy" description="CyberHawk-UG refund policy for digital products and cybersecurity services." path="/legal/refund" />
     <section className="py-[10vh] border-b border-border">
       <div className="container mx-auto px-6">
         <span className="font-mono text-xs text-primary tracking-widest uppercase">// LEGAL</span>

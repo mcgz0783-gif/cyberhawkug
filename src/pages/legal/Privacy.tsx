@@ -1,7 +1,9 @@
 import Layout from "@/components/layout/Layout";
+import SEO from "@/components/SEO";
 
 const Privacy = () => (
   <Layout>
+      <SEO title="Privacy Policy" description="CyberHawk-UG privacy policy detailing how we collect, use, and protect your data." path="/legal/privacy" />
     <section className="py-[10vh] border-b border-border">
       <div className="container mx-auto px-6">
         <span className="font-mono text-xs text-primary tracking-widest uppercase">// LEGAL</span>

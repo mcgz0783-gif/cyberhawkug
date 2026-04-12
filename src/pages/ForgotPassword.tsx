@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Shield } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ const ForgotPassword = () => {
 
   return (
     <Layout>
+      <SEO title="Forgot Password" description="Reset your CyberHawk-UG account password securely." path="/forgot-password" />
       <section className="min-h-[80vh] flex items-center justify-center py-20">
         <div className="w-full max-w-md border border-border bg-card p-8">
           <div className="flex items-center gap-2 mb-6">

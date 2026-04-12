@@ -233,6 +233,21 @@ export type Database = {
         }
         Relationships: []
       }
+      notes: {
+        Row: {
+          id: number
+          title: string
+        }
+        Insert: {
+          id?: never
+          title: string
+        }
+        Update: {
+          id?: never
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           ban_reason: string | null
@@ -372,6 +387,7 @@ export type Database = {
         Returns: undefined
       }
       is_admin_or_super_admin: { Args: never; Returns: boolean }
+      is_not_banned: { Args: never; Returns: boolean }
     }
     Enums: {
       purchase_status: "PENDING" | "COMPLETED" | "REFUNDED" | "DISPUTED"

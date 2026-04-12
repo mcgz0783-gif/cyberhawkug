@@ -7,12 +7,25 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const SAFE_ERRORS = new Set([
+  "Not authenticated",
+  "Unauthorized",
+  "Already purchased",
+  "ebookId required",
+  "Ebook not found",
+  "Ebook not available",
+  "Invalid discount code",
+  "Discount code expired",
+  "Discount code usage limit reached",
+  "Account suspended",
+]);
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!STRIPE_SECRET_KEY) throw new Error("STRIPE_SECRET_KEY not configured");
+    if (!STRIPE_SECRET_KEY) throw new Error("Payment service not configured");
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SUPABASE_PUBLISHABLE_KEY = Deno.env.get("SUPABASE_PUBLISHABLE_KEY")!;
@@ -29,6 +42,15 @@ serve(async (req) => {
 
     const { ebookId, discountCode } = await req.json();
     if (!ebookId) throw new Error("ebookId required");
+
+    // Check if user is banned
+    const supabaseAdmin = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("is_banned, is_active")
+      .eq("id", user.id)
+      .single();
+    if (profile?.is_banned || profile?.is_active === false) throw new Error("Account suspended");
 
     const { data: ebook, error: ebookError } = await supabase
       .from("ebooks")
@@ -48,8 +70,6 @@ serve(async (req) => {
       .maybeSingle();
 
     if (existing) throw new Error("Already purchased");
-
-    const supabaseAdmin = createClient(SUPABASE_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
     // Validate discount code if provided
     let discountPercent = 0;
@@ -138,9 +158,8 @@ serve(async (req) => {
     // Increment discount code usage
     if (discountId) {
       await supabaseAdmin.rpc("increment_discount_usage", { discount_id: discountId }).catch(() => {
-        // Fallback: direct update
         supabaseAdmin.from("discount_codes")
-          .update({ current_uses: discountPercent }) // Will be handled by trigger
+          .update({ current_uses: discountPercent })
           .eq("id", discountId);
       });
     }
@@ -150,7 +169,8 @@ serve(async (req) => {
     });
   } catch (error: any) {
     console.error("Checkout error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    const msg = SAFE_ERRORS.has(error.message) ? error.message : "An unexpected error occurred";
+    return new Response(JSON.stringify({ error: msg }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

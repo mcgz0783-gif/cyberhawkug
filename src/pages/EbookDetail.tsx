@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft, ShoppingBag, FileText, CheckCircle, Download, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import SEO, { buildProductJsonLd } from "@/components/SEO";
 
 const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
@@ -126,6 +127,13 @@ const EbookDetail = () => {
 
   return (
     <Layout>
+      <SEO
+        title={ebook.title}
+        description={ebook.description?.slice(0, 160)}
+        path={`/store/${ebook.slug}`}
+        image={ebook.cover_url || undefined}
+        jsonLd={buildProductJsonLd(ebook)}
+      />
       <section className="py-[10vh] border-b border-border">
         <div className="container mx-auto px-6 max-w-5xl">
           <Link to="/store" className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground hover:text-primary transition-colors mb-8">

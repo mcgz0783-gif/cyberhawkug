@@ -5,6 +5,7 @@ import Layout from "@/components/layout/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingBag, Download, Settings, LogOut, FileText, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 const Dashboard = () => {
   const { user, profile, loading, signOut } = useAuth();
@@ -61,7 +62,8 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return <Layout><div className="min-h-[80vh] flex items-center justify-center"><p className="font-mono text-sm text-muted-foreground animate-pulse">LOADING...</p></div></Layout>;
+  if (loading) return <Layout>
+      <SEO title="Dashboard" description="View your purchased reports, downloads, and account activity on CyberHawk-UG." path="/dashboard" /><div className="min-h-[80vh] flex items-center justify-center"><p className="font-mono text-sm text-muted-foreground animate-pulse">LOADING...</p></div></Layout>;
 
   const completed = purchases.filter(p => p.status === "COMPLETED");
 

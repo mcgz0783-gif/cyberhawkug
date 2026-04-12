@@ -5,6 +5,7 @@ import ThreatBadge from "@/components/ui/ThreatBadge";
 import { Link } from "react-router-dom";
 import { Clock, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -42,6 +43,7 @@ const Blog = () => {
 
   return (
     <Layout>
+      <SEO title="Threat Blog" description="Stay updated with the latest cybersecurity threats, advisories, and analysis from CyberHawk-UG's research team." path="/blog" />
       <section className="py-[12vh] border-b border-border">
         <div className="container mx-auto px-6">
           <span className="font-mono text-xs text-primary tracking-widest uppercase">// THREAT INTELLIGENCE BLOG</span>

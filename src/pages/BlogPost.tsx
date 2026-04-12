@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import ThreatBadge from "@/components/ui/ThreatBadge";
 import { Clock, ArrowLeft, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import SEO, { buildArticleJsonLd } from "@/components/SEO";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,13 +80,23 @@ const BlogPost = () => {
         .replace(/\n/g, "<br />");
 
       return (
-        <p key={i} className="font-body font-light text-muted-foreground leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: html }} />
+        <p key={i} className="font-body font-light text-muted-foreground leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
       );
     });
   };
 
   return (
     <Layout>
+      <SEO
+        title={post.title}
+        description={post.excerpt}
+        path={`/blog/${post.slug}`}
+        image={post.cover_url || undefined}
+        type="article"
+        publishedAt={post.published_at}
+        author={post.author}
+        jsonLd={buildArticleJsonLd(post)}
+      />
       <article>
         <section className="py-[10vh] border-b border-border">
           <div className="container mx-auto px-6 max-w-4xl">

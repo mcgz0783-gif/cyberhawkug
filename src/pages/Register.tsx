@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Layout from "@/components/layout/Layout";
 import { Shield } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const Register = () => {
   const { signUp } = useAuth();
@@ -28,6 +29,7 @@ const Register = () => {
   if (success) {
     return (
       <Layout>
+      <SEO title="Register" description="Create a CyberHawk-UG account to purchase threat intelligence reports and access exclusive cybersecurity content." path="/register" />
         <section className="min-h-[80vh] flex items-center justify-center py-20">
           <div className="w-full max-w-md border border-primary bg-card p-8 text-center">
             <Shield className="w-10 h-10 text-primary mx-auto mb-4" />

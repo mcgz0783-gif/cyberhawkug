@@ -75,6 +75,6 @@ serve(async (req) => {
     return new Response("OK", { status: 200 });
   } catch (error: any) {
     console.error("Webhook error:", error);
-    return new Response(error.message, { status: 400 });
+    return new Response("Webhook processing failed", { status: 400 });
   }
 });
