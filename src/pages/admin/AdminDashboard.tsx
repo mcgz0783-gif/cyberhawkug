@@ -2,9 +2,18 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Book, ShoppingCart, Users, DollarSign } from "lucide-react";
 
+interface RecentOrder {
+  id: string;
+  amount_paid: number;
+  status: string;
+  created_at: string;
+  profiles?: { email: string; full_name?: string };
+  ebooks?: { title: string };
+}
+
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ ebooks: 0, orders: 0, customers: 0, revenue: 0 });
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -74,8 +83,8 @@ const AdminDashboard = () => {
           <tbody>
             {recentOrders.map((order) => (
               <tr key={order.id} className="border-b border-border/50">
-                <td className="p-4 font-body text-foreground">{(order.profiles as any)?.full_name || (order.profiles as any)?.email}</td>
-                <td className="p-4 font-body text-foreground">{(order.ebooks as any)?.title}</td>
+              <td className="p-4 font-body text-foreground">{(order.profiles as { full_name?: string; email: string })?.full_name || (order.profiles as { email: string })?.email}</td>
+              <td className="p-4 font-body text-foreground">{(order.ebooks as { title: string })?.title}</td>
                 <td className="p-4 font-mono text-primary">{formatPrice(order.amount_paid)}</td>
                 <td className="p-4">
                   <span className={`font-mono text-xs ${order.status === "COMPLETED" ? "text-primary" : order.status === "REFUNDED" ? "text-destructive" : "text-warning"}`}>

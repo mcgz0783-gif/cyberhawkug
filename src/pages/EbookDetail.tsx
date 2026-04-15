@@ -15,9 +15,9 @@ const EbookDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [ebook, setEbook] = useState<any>(null);
+  const [ebook, setEbook] = useState<Ebook | null>(null);
   const [loading, setLoading] = useState(true);
-  const [purchase, setPurchase] = useState<any>(null);
+  const [purchase, setPurchase] = useState<{ id: string } | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
@@ -80,8 +80,9 @@ const EbookDetail = () => {
       if (error) throw error;
       if (data?.error) { toast.error(data.error); return; }
       if (data?.url) window.location.href = data.url;
-    } catch (err: any) {
-      toast.error(err.message || "Checkout failed");
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      toast.error(error.message || "Checkout failed");
     } finally {
       setCheckoutLoading(false);
     }
@@ -97,8 +98,9 @@ const EbookDetail = () => {
       if (error) throw error;
       if (data?.error) { toast.error(data.error); return; }
       if (data?.url) window.open(data.url, "_blank");
-    } catch (err: any) {
-      toast.error(err.message || "Download failed");
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      toast.error(error.message || "Download failed");
     } finally {
       setDownloading(false);
     }

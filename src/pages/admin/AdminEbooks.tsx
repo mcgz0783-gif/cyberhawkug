@@ -3,8 +3,16 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
 
+interface AdminEbook {
+  id: string;
+  title: string;
+  slug: string;
+  is_published: boolean;
+  created_at: string;
+}
+
 const AdminEbooks = () => {
-  const [ebooks, setEbooks] = useState<any[]>([]);
+  const [ebooks, setEbooks] = useState<AdminEbook[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchEbooks = async () => {

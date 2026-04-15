@@ -64,7 +64,7 @@ serve(async (req) => {
     if (purchase.status === "REFUNDED") throw new Error("Access revoked — purchase was refunded");
     if (purchase.download_count >= MAX_DOWNLOADS) throw new Error("Download limit reached (10/10)");
 
-    const ebook = purchase.ebooks as any;
+    const ebook = purchase.ebooks as { file_key: string; title: string };
     if (!ebook?.file_key) throw new Error("Ebook file not available");
 
     // Generate signed URL using service role
@@ -85,9 +85,10 @@ serve(async (req) => {
     return new Response(JSON.stringify({ url: signedUrl.signedUrl }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error: any) {
-    console.error("Download error:", error);
-    const msg = SAFE_ERRORS.has(error.message) ? error.message : "An unexpected error occurred";
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    console.error("Download error:", err);
+    const msg = SAFE_ERRORS.has(err.message) ? err.message : "An unexpected error occurred";
     return new Response(JSON.stringify({ error: msg }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

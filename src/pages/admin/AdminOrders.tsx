@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
+interface Order {
+  id: string;
+  amount_paid: number;
+  status: string;
+  created_at: string;
+  profiles?: { email: string; full_name?: string };
+  ebooks?: { title: string };
+}
+
 const AdminOrders = () => {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,8 +47,8 @@ const AdminOrders = () => {
           <tbody>
             {orders.map((order) => (
               <tr key={order.id} className="border-b border-border/50">
-                <td className="p-4 font-body text-foreground">{(order.profiles as any)?.full_name || (order.profiles as any)?.email}</td>
-                <td className="p-4 font-body text-foreground">{(order.ebooks as any)?.title}</td>
+                <td className="p-4 font-body text-foreground">{(order.profiles as { full_name?: string; email: string })?.full_name || (order.profiles as { email: string })?.email}</td>
+                <td className="p-4 font-body text-foreground">{(order.ebooks as { title: string })?.title}</td>
                 <td className="p-4 font-mono text-primary">{formatPrice(order.amount_paid)}</td>
                 <td className="p-4">
                   <span className={`font-mono text-xs ${order.status === "COMPLETED" ? "text-primary" : order.status === "REFUNDED" ? "text-destructive" : "text-warning"}`}>

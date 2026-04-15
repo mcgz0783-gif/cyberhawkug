@@ -4,8 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
 import ThreatBadge from "@/components/ui/ThreatBadge";
 
+interface AdminBlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  is_published: boolean;
+  created_at: string;
+}
+
 const AdminBlog = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<AdminBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPosts = async () => {
@@ -18,7 +27,7 @@ const AdminBlog = () => {
   useEffect(() => { fetchPosts(); }, []);
 
   const togglePublish = async (id: string, current: boolean) => {
-    const updates: any = { is_published: !current };
+    const updates: { is_published: boolean } = { is_published: !current };
     if (!current) updates.published_at = new Date().toISOString();
     await supabase.from("blog_posts").update(updates).eq("id", id);
     fetchPosts();

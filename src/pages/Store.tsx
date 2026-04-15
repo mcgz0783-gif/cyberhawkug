@@ -20,8 +20,19 @@ const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
 type SortOption = "default" | "price_asc" | "price_desc";
 
+interface StoreEbook {
+  id: string;
+  title: string;
+  slug: string;
+  cover_url?: string;
+  author?: string;
+  price?: number;
+  category?: string;
+  tags?: string[];
+}
+
 const Store = () => {
-  const [ebooks, setEbooks] = useState<any[]>([]);
+  const [ebooks, setEbooks] = useState<StoreEbook[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -78,8 +89,9 @@ const Store = () => {
       if (error) throw error;
       if (data?.url) window.location.href = data.url;
       if (data?.error) alert(data.error);
-    } catch (err: any) {
-      alert(err.message || "Checkout failed");
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      alert(error.message || "Checkout failed");
     }
     setCheckoutLoading(null);
   };

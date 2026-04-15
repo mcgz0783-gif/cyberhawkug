@@ -8,9 +8,18 @@ import { Clock, ArrowLeft, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import SEO, { buildArticleJsonLd } from "@/components/SEO";
 
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  category: string;
+  is_published: boolean;
+}
+
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

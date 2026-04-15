@@ -35,7 +35,7 @@ serve(async (req) => {
     await supabaseAdmin.from("stripe_events").upsert({
       id: event.id,
       type: event.type,
-      payload: event as any,
+      payload: (event as unknown),
     });
 
     // Handle events
@@ -73,8 +73,9 @@ serve(async (req) => {
       .eq("id", event.id);
 
     return new Response("OK", { status: 200 });
-  } catch (error: any) {
-    console.error("Webhook error:", error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    console.error("Webhook error:", err);
     return new Response("Webhook processing failed", { status: 400 });
   }
 });

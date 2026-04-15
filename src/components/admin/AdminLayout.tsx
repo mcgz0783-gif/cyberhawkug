@@ -24,7 +24,7 @@ const AdminLayout = () => {
     if (!loading && (!user || !isAdmin)) {
       navigate("/admin-login");
     }
-  }, [loading, user, isAdmin]);
+  }, [loading, user, isAdmin, navigate]);
 
   if (loading) return (
     <div className="min-h-screen bg-background flex items-center justify-center">

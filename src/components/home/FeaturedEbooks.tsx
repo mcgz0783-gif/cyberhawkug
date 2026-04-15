@@ -23,8 +23,17 @@ const staggerContainer = {
   },
 };
 
+interface Ebook {
+  id: string;
+  title: string;
+  slug: string;
+  cover_url?: string;
+  author?: string;
+  price?: number;
+}
+
 const FeaturedEbooks = () => {
-  const [ebooks, setEbooks] = useState<any[]>([]);
+  const [ebooks, setEbooks] = useState<Ebook[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

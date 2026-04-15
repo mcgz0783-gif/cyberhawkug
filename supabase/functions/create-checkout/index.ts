@@ -124,7 +124,7 @@ serve(async (req) => {
       stripeCouponId = coupon.id;
     }
 
-    const sessionParams: any = {
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: "payment",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
@@ -167,9 +167,10 @@ serve(async (req) => {
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error: any) {
-    console.error("Checkout error:", error);
-    const msg = SAFE_ERRORS.has(error.message) ? error.message : "An unexpected error occurred";
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    console.error("Checkout error:", err);
+    const msg = SAFE_ERRORS.has(err.message) ? err.message : "An unexpected error occurred";
     return new Response(JSON.stringify({ error: msg }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

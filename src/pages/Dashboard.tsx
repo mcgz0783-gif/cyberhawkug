@@ -7,15 +7,29 @@ import { ShoppingBag, Download, Settings, LogOut, FileText, AlertCircle } from "
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 
+interface Purchase {
+  id: string;
+  user_id: string;
+  ebook_id: string;
+  created_at: string;
+  ebooks?: {
+    title: string;
+    slug: string;
+    cover_url?: string;
+    author?: string;
+    category?: string;
+  };
+}
+
 const Dashboard = () => {
   const { user, profile, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [purchases, setPurchases] = useState<any[]>([]);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [downloading, setDownloading] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate("/login");
-  }, [loading, user]);
+  }, [loading, user, navigate]);
 
   useEffect(() => {
     if (user) {
@@ -37,8 +51,9 @@ const Dashboard = () => {
       if (error) throw error;
       if (data?.error) { toast.error(data.error); return; }
       if (data?.url) window.open(data.url, "_blank");
-    } catch (err: any) {
-      toast.error(err.message || "Download failed");
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      toast.error(error.message || "Download failed");
     } finally {
       setDownloading(null);
       // Refresh download count

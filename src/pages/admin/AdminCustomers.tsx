@@ -2,8 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Ban, CheckCircle } from "lucide-react";
 
+interface Customer {
+  id: string;
+  email: string;
+  full_name?: string;
+  is_banned?: boolean;
+  is_active?: boolean;
+  created_at: string;
+}
+
 const AdminCustomers = () => {
-  const [customers, setCustomers] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchCustomers = async () => {

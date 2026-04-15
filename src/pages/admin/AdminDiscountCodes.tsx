@@ -4,8 +4,20 @@ import { Plus, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
+interface DiscountCode {
+  id: string;
+  code: string;
+  description?: string;
+  discount_percent: number;
+  max_uses?: number;
+  current_uses?: number;
+  expires_at?: string;
+  is_active: boolean;
+  created_at: string;
+}
+
 const AdminDiscountCodes = () => {
-  const [codes, setCodes] = useState<any[]>([]);
+  const [codes, setCodes] = useState<DiscountCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ code: "", description: "", discount_percent: 10, max_uses: "" as string, expires_at: "" });
@@ -22,7 +34,14 @@ const AdminDiscountCodes = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const payload: any = {
+    interface CreateCodePayload {
+      code: string;
+      description: string | null;
+      discount_percent: number;
+      max_uses: number | null;
+      expires_at: string | null;
+    }
+    const payload: CreateCodePayload = {
       code: form.code.toUpperCase().trim(),
       description: form.description || null,
       discount_percent: form.discount_percent,
