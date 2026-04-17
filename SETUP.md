@@ -82,12 +82,18 @@ This document outlines all the setup fixes and improvements made to the cyberhaw
    - Go to repo Settings → Secrets and variables → Actions
    - Add these secrets:
      ```
-     VITE_SUPABASE_URL
+     VITE_SUPABASE_URL          # e.g. https://api.cyberhawk-ug.store
      VITE_SUPABASE_ANON_KEY
      VITE_SUPABASE_PROJECT_ID
      VITE_SUPABASE_PUBLISHABLE_KEY
-     VERCEL_TOKEN (for Vercel deployment)
+     SUPABASE_URL               # e.g. https://api.cyberhawk-ug.store
+     SUPABASE_ANON_KEY
+     SUPABASE_PUBLISHABLE_KEY
+     SUPABASE_SERVICE_ROLE_KEY
+     SUPABASE_ACCESS_TOKEN      # for Supabase CLI deployment
+     VERCEL_TOKEN               # for Vercel deployment
      ```
+   - Use `www.cyberhawk-ug.store` as the frontend alias and `api.cyberhawk-ug.store` as the Supabase edge function endpoint.
 
 2. **Link to Supabase & Vercel**:
    - GitHub Actions → Authorize Supabase and Vercel apps
